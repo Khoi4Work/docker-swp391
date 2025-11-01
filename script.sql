@@ -1,0 +1,26 @@
+CREATE DATABASE EcoShareManagement;
+GO
+
+USE EcoShareManagement;
+GO
+
+CREATE TABLE [users] (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    HovaTen NVARCHAR(255) NOT NULL,
+    Email NVARCHAR(255) NOT NULL UNIQUE,
+    Password NVARCHAR(255) NOT NULL UNIQUE,
+    CCCD NVARCHAR(255) NOT NULL UNIQUE,
+    GPLX NVARCHAR(255) NOT NULL UNIQUE,
+    role_id INT NOT NULL,
+    CONSTRAINT FK_User_Role FOREIGN KEY (role_id) REFERENCES role(id),
+
+);
+GO
+CREATE TABLE role (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    roleName NVARCHAR(100) NOT NULL UNIQUE
+);
+INSERT INTO role ( roleName) VALUES
+( 'users'),
+( 'staff'),
+( 'admin');

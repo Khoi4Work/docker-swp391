@@ -1,0 +1,46 @@
+Hướng dẫn chạy lại Docker khi code thay đổi
+
+1. Mục đích:
+
+   * Khi code backend thay đổi, cần rebuild image và chạy lại container để cập nhật thay đổi.
+
+2. Cách làm thủ công:
+   a) Dừng container hiện tại:
+
+   ```bash
+   docker stop <container_name>
+   docker rm <container_name>
+   ```
+
+   b) Build lại Docker image:
+
+   ```bash
+   docker build -t <image_name>:<tag> .
+   ```
+
+   c) Chạy lại container:
+
+   ```bash
+docker run -d -p <host_port>:<container_port> --name <container_name> --restart unless-stopped <image_name>:<tag>
+   ```
+
+3. Cách làm tự động (sử dụng volume để map code):
+   a) Trong Dockerfile, giữ ENTRYPOINT hoặc CMD:
+
+   ```dockerfile
+   COPY target/App-0.0.1-SNAPSHOT.jar app.jar
+   ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+   ```
+
+   b) Khi chạy container, mount thư mục source code:
+
+   ```bash
+   docker run -d -p 8080:8080 --name swp391-container -v /path/to/project/target:/app swp391-app:1.0
+   ```
+
+   * Khi code thay đổi và build lại file JAR trong target, container sẽ sử dụng file mới mà không cần rebuild image.
+
+4. Lưu ý:
+
+   * Nếu có thay đổi dependencies hoặc cấu hình Dockerfile, vẫn cần rebuild image.
+   * Nếu chỉ thay đổi code Java, cách volume map target có thể giảm thời gian rebuild.

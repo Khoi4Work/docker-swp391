@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f8fafc; color:#222; padding:20px; }
+        .card { background:#fff; border-radius:8px; padding:24px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+        .keybox { background:#f1f5f9; border-radius:6px; padding:10px; font-family:monospace; word-break:break-all; }
+        .warn { background:#fff7ed; border:1px solid #ffedd5; color:#92400e; padding:10px; border-radius:6px; margin-top:12px; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>Khóa riêng tư (Private Key) của bạn</h2>
+
+    <p>Chào <strong th:text="${fullName}"></strong>,</p>
+
+    <p>Đây là <strong>mã private key</strong> dùng để ký cho hợp đồng trong hệ thống <strong th:text="${systemName}"></strong>.</p>
+
+    <div class="keybox" th:text="${privateKeyBase64}"></div>
+
+    <div class="warn">
+        <strong>Cảnh báo bảo mật:</strong>
+        <ul>
+            <li>Không chia sẻ mã này với bất kỳ ai.</li>
+            <li>Lưu lại mã ở nơi an toàn (máy cá nhân hoặc trình quản lý mật khẩu).</li>
+            <li>Nếu nghi ngờ bị lộ, liên hệ ngay với bộ phận kỹ thuật để cấp lại khóa mới.</li>
+        </ul>
+    </div>
+
+    <p style="margin-top:16px;">Trân trọng,<br><strong>Đội bảo mật — <span th:text="${systemName}"></span></strong></p>
+</div>
+</body>
+</html>

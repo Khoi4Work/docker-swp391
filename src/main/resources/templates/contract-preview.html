@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hợp đồng đồng sở hữu xe - EcoShare</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { max-width: 800px; margin: 2rem auto; padding: 2rem; font-family: "Times New Roman", Times, serif; line-height: 1.8; color: #333; border: 1px solid #ccc; border-radius: 8px; background-color: #fafafa; }
+        h1 { text-align:center; text-transform:uppercase; font-weight:bold; margin:0 0 1rem 0; font-style:italic; margin-left:50px; }
+        h2 { font-size:1.2rem; border-bottom:1px solid #ccc; padding-bottom:0.3rem; margin-top:1rem; }
+        h3 { font-size:1rem; margin-top:0.8rem; }
+        .section { margin-bottom:1.5rem; }
+        .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+        .coowner-card { border:1px solid #ddd; border-radius:6px; padding:0.8rem; background:#fff; }
+    </style>
+</head>
+<body>
+
+<!-- Tiêu đề / logo -->
+<div style="position:relative; margin-bottom:1rem;">
+    <!-- <img src="/logo.png" alt="Logo" style="position:absolute; left:0; top:50%; transform:translateY(-50%); height:50px; object-fit:contain;" /> -->
+    <h1>THỎA THUẬN ĐỒNG SỞ HỮU XE</h1>
+</div>
+
+<hr style="margin-bottom:1.5rem; border-color:#999;" />
+
+<!-- Thông tin hợp đồng -->
+<div>
+    <p><strong>Mã hợp đồng:</strong> <span th:text="${contractCode}"></span></p>
+    <p><strong>Ngày tạo:</strong> <span th:text="${#temporals.format(contractDate,'dd/MM/yyyy')}"></span></p>
+    <p><strong>Nhóm:</strong> <span th:text="${groupName}"></span></p>
+</div>
+
+<!-- 1. Bên A -->
+<section class="section">
+    <h2>1. Bên A - Các đồng sở hữu</h2>
+    <h3>A. ĐỒNG SỞ HỮU CHÍNH</h3>
+    <div style="margin-bottom:1rem;">
+        <p><strong>Họ tên:</strong> <span th:text="${owner.name}"></span></p>
+        <p th:if="${owner.email}"><strong>Email:</strong> <span th:text="${owner.email}"></span></p>
+        <p th:if="${owner.idNumber}"><strong>CCCD:</strong> <span th:text="${owner.idNumber}"></span></p>
+        <p th:if="${owner.ownership != null}"><strong>Tỷ lệ sở hữu:</strong> <span th:text="${owner.ownership}"></span>%</p>
+    </div>
+
+    <div th:if="${coOwners != null and !#lists.isEmpty(coOwners)}">
+        <h3>B. CÁC ĐỒNG SỞ HỮU KHÁC</h3>
+        <div class="grid-2">
+            <div class="coowner-card" th:each="co : ${coOwners}">
+                <p><strong>Tên đồng sở hữu:</strong> <span th:text="${co.name}"></span></p>
+                <p th:if="${co.email}"><strong>Email:</strong> <span th:text="${co.email}"></span></p>
+                <p th:if="${co.idNumber}"><strong>CCCD:</strong> <span th:text="${co.idNumber}"></span></p>
+                <p th:if="${co.ownership != null}"><strong>Tỷ lệ sở hữu:</strong> <span th:text="${co.ownership}"></span>%</p>
+            </div>
+        </div>
+    </div>
+    <p th:if="${coOwners == null or #lists.isEmpty(coOwners)}">Không có đồng sở hữu khác</p>
+</section>
+
+<!-- 2. Bên B -->
+<section class="section">
+    <h2>2. Bên B - EcoShare Platform</h2>
+    <p><strong>Tên đơn vị:</strong> EcoShare Platform</p>
+    <p><strong>Email:</strong> support@ecoshare.vn</p>
+    <p><strong>Người đại diện:</strong> Nguyễn Đình Nguyên Khôi (trưởng nhóm)</p>
+    <p><strong>Địa chỉ trụ sở:</strong> Đại Học FPT cơ sở TPHCM</p>
+</section>
+
+<!-- 3. Thông tin xe -->
+<section class="section">
+    <h2>3. Thông tin xe sở hữu</h2>
+
+    <!-- Loại phương tiện đã bỏ -->
+
+    <p th:if="${vehicle.brand}"><strong>Hãng sản xuất:</strong> <span th:text="${vehicle.brand}"></span></p>
+    <p th:if="${vehicle.model}"><strong>Model:</strong> <span th:text="${vehicle.model}"></span></p>
+    <p th:if="${vehicle.plateNo}"><strong>Biển số đăng ký:</strong> <span th:text="${vehicle.plateNo}"></span></p>
+    <p th:if="${vehicle.color}"><strong>Màu sắc:</strong> <span th:text="${vehicle.color}"></span></p>
+    <p th:if="${vehicle.batteryCapacity != null}"><strong>Dung tích pin:</strong> <span th:text="${vehicle.batteryCapacity}"></span> kWh</p>
+</section>
+
+
+<!-- Section 4: Chính sách và nghĩa vụ các bên -->
+<section style="margin-bottom: 1.5rem;">
+    <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 0.3rem;">
+        <strong>4. Chính sách và nghĩa vụ các bên liên quan</strong>
+    </h2>
+
+    <div style="margin-top: 0.8rem; padding: 0.8rem; border: 1px solid #e0e0e0; background: #fff;">
+        <!-- Điều 1 -->
+        <p style="margin: 0 0 0.6rem 0;"><strong>Điều 1. Quyền sử dụng phương tiện</strong></p>
+        <div style="margin-left: 1rem; line-height: 1.6;">
+            <p><strong>a)</strong> Mỗi đồng sở hữu có quyền sử dụng phương tiện theo tỷ lệ sở hữu và/hoặc thỏa thuận nội bộ.</p>
+            <p><strong>b)</strong> Việc sử dụng phải đăng ký/đặt lịch qua ứng dụng hoặc công cụ do Bên B cung cấp. Xung đột lịch ưu tiên theo: (i) thỏa thuận trước; (ii) quyền ưu tiên quy định; (iii) nếu không có thỏa thuận, ưu tiên bên sở hữu tỷ lệ cao hơn.</p>
+            <p><strong>c)</strong> Giới hạn sử dụng (khu vực, km, thời gian) phải thống nhất bằng văn bản và lưu trên nền tảng Bên B.</p>
+        </div>
+
+        <hr style="margin: 0.8rem 0; border-color: #eee;" />
+
+        <!-- Điều 2 -->
+        <p style="margin: 0 0 0.6rem 0;"><strong>Điều 2. Nghĩa vụ tài chính</strong></p>
+        <div style="margin-left: 1rem; line-height: 1.6;">
+            <p><strong>a)</strong> Chi phí liên quan đến phương tiện (bảo hiểm, đăng kiểm, bảo dưỡng, sửa chữa, phí sạc, thuế, lệ phí khác) chia theo tỷ lệ sở hữu trừ khi có thỏa thuận khác.</p>
+            <p><strong>b)</strong> Thanh toán đúng hạn. Trễ hạn chịu lãi/chi phí phạt theo thỏa thuận.</p>
+            <p><strong>c)</strong> Vi phạm quá 30 ngày: áp dụng biện pháp tạm thời (yêu cầu trả góp, phong tỏa quyền sử dụng) hoặc xử lý theo Điều 4 & tranh chấp.</p>
+        </div>
+
+        <hr style="margin: 0.8rem 0; border-color: #eee;" />
+
+        <!-- Điều 3 -->
+        <p style="margin: 0 0 0.6rem 0;"><strong>Điều 3. Bảo quản & trách nhiệm khi gây hư hỏng</strong></p>
+        <div style="margin-left: 1rem; line-height: 1.6;">
+            <p><strong>a)</strong> Sử dụng và bảo quản phương tiện đúng hướng dẫn nhà sản xuất và luật giao thông.</p>
+            <p><strong>b)</strong> Thông báo hư hỏng, tai nạn trong vòng 48h, cung cấp thông tin, hình ảnh, biên bản nếu có.</p>
+            <p><strong>c)</strong> Chi phí sửa chữa do lỗi người sử dụng chịu. Tranh chấp ưu tiên bảo hiểm, sau đó phân chia theo tỷ lệ lỗi/thiệt hại hoặc thỏa thuận chung.</p>
+            <p><strong>d)</strong> Không thay đổi kết cấu, hệ thống an toàn mà không có sự đồng ý bằng văn bản của tất cả đồng sở hữu.</p>
+        </div>
+
+        <hr style="margin: 0.8rem 0; border-color: #eee;" />
+
+        <!-- Điều 4 -->
+        <p style="margin: 0 0 0.6rem 0;"><strong>Điều 4. Cơ chế ra quyết định</strong></p>
+        <div style="margin-left: 1rem; line-height: 1.6;">
+            <p><strong>a)</strong> Quyết định thông thường: đa số theo tỷ lệ sở hữu (>50%).</p>
+            <p><strong>b)</strong> Quyết định quan trọng: đồng thuận ≥70% tổng tỷ lệ sở hữu.</p>
+            <p><strong>c)</strong> Người đại diện kỹ thuật với bên thứ 3 mặc định là Đồng sở hữu chính, trừ khi các bên chỉ định khác bằng văn bản.</p>
+            <p><strong>d)</strong> Mọi quyết định phải ghi bằng văn bản hoặc nền tảng của Bên B và có giá trị ràng buộc.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Section B: Quy định tài chính & phân chia chi phí -->
+<section style="margin-bottom: 1.5rem;">
+    <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 0.3rem;">
+        <strong>B. Quy định tài chính & phân chia chi phí</strong>
+    </h2>
+
+    <div style="margin-top: 0.8rem; padding: 0.8rem; border: 1px solid #e0e0e0; background: #fff;">
+        <!-- Điều 5 -->
+        <p style="margin: 0 0 0.6rem 0;"><strong>Điều 5. Giao dịch phương tiện</strong></p>
+        <div style="margin-left: 1rem; line-height: 1.6;">
+            <p><strong>a)</strong> Tổng chi phí mua phương tiện chia theo tỷ lệ sở hữu; các bên nộp phần góp đúng hạn.</p>
+            <p><strong>b)</strong> Thay đổi giá bán (tăng/giảm) phân chia theo tỷ lệ sở hữu tương ứng.</p>
+        </div>
+
+        <hr style="margin: 0.8rem 0; border-color: #eee;" />
+
+        <!-- Điều 6 -->
+        <p style="margin: 0 0 0.6rem 0;"><strong>Điều 6. Chi phí định kỳ và vận hành</strong></p>
+        <div style="margin-left: 1rem; line-height: 1.6;">
+            <p><strong>a)</strong> Chi phí định kỳ (bảo dưỡng, bảo hiểm, thuế, phí sạc) chia theo tỷ lệ sở hữu, trừ khi có thỏa thuận khác.</p>
+            <p><strong>b)</strong> Nộp phần của mình đúng hạn; trễ hạn chịu lãi/chi phí phạt.</p>
+            <p><strong>c)</strong> Bên B thông báo định kỳ các khoản phí và tổng hợp tình trạng thanh toán.</p>
+        </div>
+
+        <hr style="margin: 0.8rem 0; border-color: #eee;" />
+
+        <!-- Điều 7 -->
+        <p style="margin: 0 0 0.6rem 0;"><strong>Điều 7. Thanh toán và xử lý vi phạm</strong></p>
+        <div style="margin-left: 1rem; line-height: 1.6;">
+            <p><strong>a)</strong> Thanh toán qua ngân hàng, ví điện tử hoặc hệ thống của Bên B.</p>
+            <p><strong>b)</strong> Vi phạm thanh toán: yêu cầu nộp ngay phần chưa thanh toán, hạn chế quyền sử dụng, áp dụng xử lý theo Điều 4 hoặc tranh chấp.</p>
+            <p><strong>c)</strong> Mọi khoản thanh toán và vi phạm được ghi nhận trên nền tảng quản lý của Bên B.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Section C: Cơ chế xử lý tranh chấp & sửa đổi hợp đồng -->
+<section style="margin-bottom: 1.5rem;">
+    <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 0.3rem;">
+        <strong>C. Cơ chế xử lý tranh chấp & sửa đổi hợp đồng</strong>
+    </h2>
+
+    <div style="margin-top: 0.8rem; padding: 0.8rem; border: 1px solid #e0e0e0; background: #fff;">
+        <!-- Điều 8 -->
+        <p style="margin: 0 0 0.6rem 0;"><strong>Điều 8. Xử lý tranh chấp</strong></p>
+        <div style="margin-left: 1rem; line-height: 1.6;">
+            <p><strong>a)</strong> Tranh chấp về quyền sử dụng, chi phí, bảo quản ưu tiên giải quyết nội bộ.</p>
+            <p><strong>b)</strong> Không đạt thỏa thuận: Bên B hỗ trợ trung gian, tư vấn, ghi nhận bằng chứng, đề xuất phân chia hợp lý.</p>
+            <p><strong>c)</strong> Vẫn không giải quyết: đưa ra tòa án hoặc trọng tài theo thỏa thuận.</p>
+        </div>
+
+        <hr style="margin: 0.8rem 0; border-color: #eee;" />
+
+        <!-- Điều 9 -->
+        <p style="margin: 0 0 0.6rem 0;"><strong>Điều 9. Sửa đổi hợp đồng</strong></p>
+        <div style="margin-left: 1rem; line-height: 1.6;">
+            <p><strong>a)</strong> Sửa đổi, bổ sung hợp đồng phải lập văn bản, ký bởi tất cả đồng sở hữu hoặc thông qua nền tảng Bên B.</p>
+            <p><strong>b)</strong> Thay đổi tỷ lệ sở hữu, quyền lợi, nghĩa vụ, điều kiện quan trọng: đồng thuận ≥75% tỷ lệ sở hữu trừ khi có quy định khác.</p>
+            <p><strong>c)</strong> Sửa đổi không tuân thủ quy trình sẽ không có giá trị pháp lý.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Section D: Thời hạn hợp đồng & chấm dứt -->
+<section style="margin-bottom: 1.5rem;">
+    <h2 style="border-bottom: 1px solid #ccc; padding-bottom: 0.3rem;">
+        <strong>D. Thời hạn hợp đồng & chấm dứt</strong>
+    </h2>
+
+    <div style="margin-top: 0.8rem; padding: 0.8rem; border: 1px solid #e0e0e0; background: #fff;">
+        <!-- Điều 10 -->
+        <p style="margin: 0 0 0.6rem 0;"><strong>Điều 10. Thời hạn hợp đồng</strong></p>
+        <div style="margin-left: 1rem; line-height: 1.6;">
+            <p><strong>a)</strong> Hợp đồng có hiệu lực từ ngày ký, vô thời hạn trừ khi các bên thỏa thuận khác.</p>
+            <p><strong>b)</strong> Các bên xem xét định kỳ và cập nhật thỏa thuận về quyền sử dụng, chi phí và điều kiện khác qua Điều 9.</p>
+        </div>
+
+        <hr style="margin: 0.8rem 0; border-color: #eee;" />
+
+        <!-- Điều 11 -->
+        <p style="margin: 0 0 0.6rem 0;"><strong>Điều 11. Chấm dứt hợp đồng</strong></p>
+        <div style="margin-left: 1rem; line-height: 1.6;">
+            <p><strong>a)</strong> Hợp đồng chấm dứt khi:</p>
+            <ul>
+                <li>Tất cả đồng sở hữu đồng thuận;</li>
+                <li>Vi phạm nghiêm trọng không khắc phục;</li>
+                <li>Chuyển nhượng phương tiện;</li>
+                <li>Mất năng lực pháp lý.</li>
+            </ul>
+            <p><strong>b)</strong> Quy trình: thông báo văn bản, thanh toán đầy đủ chi phí, xác nhận quyền sở hữu và bàn giao phương tiện.</p>
+            <p><strong>c)</strong> Sau chấm dứt: quyền sở hữu, trách nhiệm và nghĩa vụ tài chính kết thúc hoặc điều chỉnh theo thỏa thuận riêng.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- Phần ký (FE sẽ gắn chữ ký) -->
+<div class="section">
+    <h2>5. Xác nhận</h2>
+    <p>Phần ký xác nhận sẽ được FE gắn chữ ký hoặc private key.</p>
+</div>
+
+</body>
+</html>

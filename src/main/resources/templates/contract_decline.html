@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>Thông báo từ chối hợp đồng - EcoShare</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            background: #ffffff;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        .header {
+            text-align: center;
+            color: #2E7D32;
+        }
+        .title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-top: 20px;
+        }
+        .content {
+            font-size: 15px;
+            color: #555;
+            line-height: 1.6;
+            margin-top: 16px;
+        }
+        .button {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 12px 22px;
+            color: #fff;
+            background-color: #2E7D32;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .footer {
+            margin-top: 32px;
+            font-size: 13px;
+            color: #999;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <img src="https://ecoshare.vn/logo.png" alt="EcoShare Logo" width="120" />
+        <div class="title">Thông báo từ chối hợp đồng</div>
+    </div>
+
+    <div class="content">
+        <p>Kính chào Quý khách,</p>
+        <p>Chúng tôi xin thông báo rằng hợp đồng điện tử của Quý khách đã bị <strong>từ chối phê duyệt</strong>.</p>
+        <p>Nếu Quý khách muốn xem chi tiết nội dung hợp đồng và lý do từ chối, vui lòng nhấn vào nút bên dưới:</p>
+
+        <p style="text-align:center;">
+            <a th:href="${secureUrl}" class="button">Xem chi tiết hợp đồng</a>
+        </p>
+
+        <p>Nếu Quý khách có bất kỳ thắc mắc nào, vui lòng liên hệ bộ phận hỗ trợ của EcoShare để được giải đáp.</p>
+        <p>Trân trọng,<br/>
+            <strong>Đội ngũ EcoShare</strong></p>
+    </div>
+
+    <div class="footer">
+        © 2025 EcoShare. Mọi quyền được bảo lưu.<br/>
+        Đây là email tự động, vui lòng không trả lời lại.
+    </div>
+</div>
+</body>
+</html>

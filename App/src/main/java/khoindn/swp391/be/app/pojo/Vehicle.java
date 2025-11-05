@@ -42,7 +42,7 @@ public class Vehicle {
     private LocalDateTime createdAt;
 
     @Column(name="price", length = 32)
-    private int price;
+    private float price;
 
     @Column(name="image",length=32)
     private String imageUrl;

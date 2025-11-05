@@ -18,7 +18,7 @@ public class MenuVehicleService {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "name", unique = true)
-    private String serviceName;
+    private String serviceName; // Maintenance, Insurance, Battery / Energy, Financial
     @Column(name = "description", unique = true)
     private String description;
     @Column(name = "price")

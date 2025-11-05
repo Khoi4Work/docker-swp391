@@ -122,7 +122,15 @@ public class GroupMemberController {
             return ResponseEntity.status(403).body("Unauthorized");
         }
         GroupMember groupMember = iGroupMemberService.getGroupOwnerByGroupIdAndUserId(votingRequest.getGroupId(), user.getId());
-        iGroupMemberService.setDecision(votingRequest.getVote(), votingRequest.getDecisionId(), groupMember);
-        return ResponseEntity.status(200).body(votingRequest);
+        if (groupMember == null) {
+            throw new GroupMemberNotFoundException("Member is not in Group!");
+        }
+        DecisionVote vote = iGroupMemberService.setDecision(
+                votingRequest.getVote(),
+                votingRequest.getDecisionId(),
+                votingRequest.getServiceId(),
+                groupMember);
+
+        return ResponseEntity.status(200).body(vote);
     }
 }

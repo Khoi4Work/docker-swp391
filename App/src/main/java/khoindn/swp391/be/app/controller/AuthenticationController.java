@@ -35,8 +35,10 @@ public class AuthenticationController {
     @PostMapping("/login/{roleId}")
     public ResponseEntity<UsersResponse> login(@PathVariable Integer roleId, @RequestBody @Valid LoginUser loginUser) {
         // Kiểm tra roleId với thông tin user
+        System.out.println();
         UsersResponse usersResponse = authenticationService.login(loginUser);
 
+        System.out.println(roleId+"-"+usersResponse.getRole().getRoleId());
         if (!roleId.equals(usersResponse.getRole().getRoleId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Sai loại tài khoản");
         }

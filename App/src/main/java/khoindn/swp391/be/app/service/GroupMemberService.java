@@ -46,12 +46,7 @@ public class GroupMemberService implements IGroupMemberService {
     private IDecisionVoteDetailRepository iDecisionVoteDetailRepository;
     @Autowired
     private IVehicleService iVehicleService;
-    @Autowired
-    private IVehicleRepository iVehicleRepository;
-    @Autowired
-    private IRequestVehicleServiceRepository iRequestVehicleServiceRepository;
-    @Autowired
-    private IMenuVehicleServiceRepository iMenuVehicleServiceRepository;
+
 
     // ---------------------- EXISTING CODE ----------------------
     @Override
@@ -151,22 +146,6 @@ public class GroupMemberService implements IGroupMemberService {
         return iGroupMemberRepository.save(gm);
     }
 
-    @Override
-    public GroupMember leaveGroup(LeaveGroupReq request) {
-        RequestGroupService requestProcessing = iRequestGroupServiceRepository.findRequestGroupById(request.getRequestId());
-        if (requestProcessing == null) {
-            throw new RequestGroupNotFoundException("REQUEST_NOT_FOUND");
-        }
-        // Update status of GroupMember
-        GroupMember user_leaving = requestProcessing.getGroupMember();
-        user_leaving.setStatus(StatusGroupMember.LEAVED);
-        iGroupMemberRepository.save(user_leaving);
-        // Update status of Group
-        Group group = user_leaving.getGroup();
-        group.setStatus(StatusGroup.INACTIVE);
-        iGroupRepository.save(group);
-        return user_leaving;
-    }
 
     @Override
     public DecisionVote createDecision(DecisionVoteReq request, GroupMember gm) {
@@ -189,7 +168,7 @@ public class GroupMemberService implements IGroupMemberService {
     }
 
     @Override
-    public DecisionVote setDecision(int choice, long idDecision, GroupMember gm) {
+    public DecisionVote setDecision(int choice, long idDecision, int serviceId, GroupMember gm) {
         DecisionVote vote = iDecisionVoteRepository.getDecisionVoteById(idDecision);
         if (vote == null) {
             throw new DecisionVoteNotFoundException("DECISION_NOT_FOUND_OR_DECISION_NOT_EXISTS");
@@ -224,63 +203,59 @@ public class GroupMemberService implements IGroupMemberService {
         // Lưu lại chi tiết vote
         iDecisionVoteDetailRepository.save(voteDetail);
 
-        // Lấy toàn bộ danh sách phiếu cho quyết định này
-        List<DecisionVoteDetail> voteDetails = iDecisionVoteDetailRepository.getAllByDecisionVote(vote);
+        // check voters's vote and request if vote is accepted
+        checkAllVoters(vote, gm.getGroup().getGroupId(), serviceId);
 
-        // Tính tổng tỉ lệ đồng ý và từ chối
-        double totalAccepted = voteDetails.stream()
-                .filter(v -> v.getOptionDecisionVote() == OptionDecisionVoteDetail.ACCEPTED)
-                .mapToDouble(v -> v.getGroupMember().getOwnershipPercentage())
-                .sum();
 
-        double totalRejected = voteDetails.stream()
-                .filter(v -> v.getOptionDecisionVote() == OptionDecisionVoteDetail.REJECTED)
-                .mapToDouble(v -> v.getGroupMember().getOwnershipPercentage())
-                .sum();
 
-        // Logic quyết định
-        if (voteDetails.stream()
-                .filter(decisionVoteDetail -> decisionVoteDetail.getVotedAt().isBefore(vote.getEndedAt()))
-                .anyMatch(v -> v.getOptionDecisionVote() == OptionDecisionVoteDetail.ABSENT)) {
-            totalRejected += voteDetails
-                    .stream()
-                    .filter(decisionVoteDetail -> decisionVoteDetail.getVotedAt().isBefore(vote.getEndedAt()))
-                    .filter(v -> v.getOptionDecisionVote() == OptionDecisionVoteDetail.ABSENT)
-                    .mapToDouble(v -> v.getGroupMember().getOwnershipPercentage()).sum();
-        } else if (totalRejected > 0 && totalAccepted < 0.75) {
-            vote.setStatus(StatusDecisionVote.REJECTED);
-        } else if (totalAccepted > 0.75) {
-            vote.setStatus(StatusDecisionVote.APPROVED);
-        }
-        iDecisionVoteRepository.save(vote);
         return vote;
-//        if (iMenuVehicleServiceRepository.findAll().stream().anyMatch(
-//                menuVehicleService ->
-//                        menuVehicleService.getServiceName().contains(vote.getDecisionName()))) {
-//            MenuVehicleService vehicleService = iMenuVehicleServiceRepository
-//                    .getMenuVehicleServiceByServiceNameContains(vote.getDecisionName());
-//
-//            requestVehicleService(vote.getCreatedBy().getGroup().getGroupId(),vehicleService.getId());
-//            return vote;
-//        }
-//        return null;
     }
 
     @Override
-    public RequestVehicleService requestVehicleService(int groupId, int serviceId) {
-        Users user = authenticationService.getCurrentAccount();
-        GroupMember gm = iGroupMemberRepository.findGroupMembersByUsers_IdAndGroup_GroupId(user.getId(), groupId);
-        if (gm == null) {
-            throw new GroupMemberNotFoundException("GROUP_NOT_FOUND");
-        }
-        RequestVehicleService vehicleService = new RequestVehicleService();
-        vehicleService.setGroupMember(gm);
-        vehicleService.setVehicle(iVehicleRepository.getVehiclesByGroup(gm.getGroup()));
-        vehicleService.setRequestVehicleServiceDetail(new RequestVehicleServiceDetail());
-        iRequestVehicleServiceRepository.save(vehicleService);
+    public DecisionVote checkAllVoters(DecisionVote vote, int groupId, int serviceId) {
+        // Lấy toàn bộ danh sách phiếu cho quyết định này
+        List<DecisionVoteDetail> voteDetails = iDecisionVoteDetailRepository.getAllByDecisionVote(vote);
 
-        return vehicleService;
+
+        if (LocalDateTime.now().isAfter(vote.getEndedAt()) ||
+                voteDetails.stream().noneMatch(
+                        v -> v.getOptionDecisionVote() == OptionDecisionVoteDetail.ABSENT)) {
+
+            // Tính tổng tỉ lệ đồng ý và từ chối
+            long totalAccepted = voteDetails.stream()
+                    .filter(v -> v.getOptionDecisionVote() == OptionDecisionVoteDetail.ACCEPTED)
+                    .count();
+
+            long totalRejected = voteDetails.stream()
+                    .filter(v -> v.getOptionDecisionVote() == OptionDecisionVoteDetail.REJECTED)
+                    .count();
+
+
+            if (voteDetails.stream()
+                    .filter(decisionVoteDetail -> decisionVoteDetail.getVotedAt().isBefore(vote.getEndedAt()))
+                    .anyMatch(v -> v.getOptionDecisionVote() == OptionDecisionVoteDetail.ABSENT)) {
+
+                totalRejected += voteDetails
+                        .stream()
+                        .filter(decisionVoteDetail -> decisionVoteDetail.getVotedAt().isBefore(vote.getEndedAt()))
+                        .filter(v -> v.getOptionDecisionVote() == OptionDecisionVoteDetail.ABSENT)
+                        .count();
+
+            }
+
+            if (totalRejected >= totalAccepted) {
+                vote.setStatus(StatusDecisionVote.REJECTED);
+            } else {
+                vote.setStatus(StatusDecisionVote.APPROVED);
+                iVehicleService.requestVehicleService(groupId, serviceId);
+            }
+            iDecisionVoteRepository.save(vote);
+
+        }
+        return vote;
     }
+
+
 
 
 }

@@ -11,4 +11,5 @@ public class VotingRequest {
     long decisionId;
     int groupId;
     int vote;
+    int serviceId;
 }

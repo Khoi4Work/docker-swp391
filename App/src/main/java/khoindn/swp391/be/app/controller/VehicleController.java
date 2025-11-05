@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @CrossOrigin(origins = "http://localhost:8081")
 @RequestMapping("/vehicle")
@@ -24,6 +22,16 @@ public class VehicleController {
     public ResponseEntity<Vehicle> getVehicleByGroupID(@PathVariable int groupId) {
         Vehicle vehicle = iVehicleService.findVehicleByGroupId(groupId);
         return ResponseEntity.status(HttpStatus.OK).body(vehicle);
+    }
+
+    @GetMapping("/service")
+    public ResponseEntity getMenuVehicleService() {
+        return ResponseEntity.status(HttpStatus.OK).body(iVehicleService.getMenuVehicleServices());
+    }
+
+    @GetMapping("/service/request")
+    public ResponseEntity getVehicleServiceRequest() {
+        return  ResponseEntity.status(200).body(iVehicleService.getAllRequestVehicleSerive());
     }
 
 }

@@ -1,4 +1,5 @@
 package khoindn.swp391.be.app.service;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,22 +9,25 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 @Service
-public class SupabaseService implements ISupabaseService{
+public class SupabaseService implements ISupabaseService {
 
 
     @Value("${SUPABASE_URL}")
-    private  String SUPABASE_URL;
+    private String SUPABASE_URL;
     @Value("${SUPABASE_KEY}")
-    private  String SUPABASE_KEY;
-    @Value("${SUPABASE_LINK_URL}")
-    private  String SUPABASE_LINK_URL;
+    private String SUPABASE_KEY;
+    @Value("${SUPABASE_PUBLIC_URL}")
+    private String SUPABASE_PUBLIC_URL;
+    @Value("${SUPABASE_URL_LIST}")
+    private String SUPABASE_URL_LIST;
 
 
     @Override
     public String uploadFile(MultipartFile file) throws Exception {
         String fileName = file.getOriginalFilename(); // giữ tên file gốc
+        System.out.println(fileName);
         if (isFileExist(fileName)) {
-            throw new RuntimeException("file is existed!");
+            throw new RuntimeException("file is existed! and now Deleted!");
         }
         URL url = new URL(SUPABASE_URL + fileName);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -45,7 +49,7 @@ public class SupabaseService implements ISupabaseService{
         if (responseCode == 200) {
             // trả public link nếu bucket public
 
-            return SUPABASE_LINK_URL + fileName;
+            return SUPABASE_PUBLIC_URL + fileName;
         } else {
             throw new RuntimeException("Upload thất bại, code: " + responseCode);
         }
@@ -53,7 +57,8 @@ public class SupabaseService implements ISupabaseService{
 
     public boolean isFileExist(String fileName) {
         try {
-            URL url = new URL(SUPABASE_LINK_URL + fileName);
+            URL url = new URL(SUPABASE_PUBLIC_URL + fileName);
+            System.out.println(url.toString());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.connect();
             int code = conn.getResponseCode();
@@ -64,22 +69,39 @@ public class SupabaseService implements ISupabaseService{
         }
     }
 
+
     @Override
     public String getFileUrl(String fileName) {
         // Chỉ cần nối SUPABASE_LINK_URL với filename nếu bucket public
-        return SUPABASE_LINK_URL + fileName;
+        return SUPABASE_PUBLIC_URL + fileName;
     }
 
     @Override
-    public void deleteFile(String linkImage) throws Exception {
-        URL url = new URL(linkImage);
+    public void deleteFile(String fileName) throws Exception {
+        String bucket = "uploadsPDF";
+
+        URL url = new URL(SUPABASE_URL+bucket);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
         conn.setRequestMethod("DELETE");
         conn.setRequestProperty("Authorization", "Bearer " + SUPABASE_KEY);
+        conn.setRequestProperty("apikey", SUPABASE_KEY);
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+
+        // Body phải là mảng JSON chứa đường dẫn file (tương đối trong bucket)
+        String jsonBody = "[\"" + fileName + "\"]";
+
+        try (var os = conn.getOutputStream()) {
+            byte[] input = jsonBody.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
 
         int responseCode = conn.getResponseCode();
         if (responseCode != 200 && responseCode != 204) {
             throw new RuntimeException("Xóa file thất bại, code: " + responseCode);
+        } else {
+            System.out.println("✅ File deleted successfully: " + fileName);
         }
     }
 

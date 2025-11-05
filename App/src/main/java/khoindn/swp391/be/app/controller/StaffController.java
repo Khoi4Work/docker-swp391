@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/staff")
+@CrossOrigin(origins = "http://localhost:8081")
 @SecurityRequirement(name = "api")
 public class StaffController {
     @Autowired
@@ -27,9 +28,9 @@ public class StaffController {
     @Autowired
     private AuthenticationService authenticationService;
     @Autowired
-    private IGroupMemberService iGroupMemberService;
-    @Autowired
     private IContractService iContractService;
+    @Autowired
+    private IStaffService iStaffService;
 
     // DELETE GROUP
 
@@ -47,7 +48,7 @@ public class StaffController {
         if (!staff.getRole().getRoleName().equalsIgnoreCase("staff")) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
         }
-        GroupMember user_leaving = iGroupMemberService.leaveGroup(request);
+        GroupMember user_leaving = iStaffService.leaveGroup(request);
         return ResponseEntity.status(HttpStatus.OK).body(user_leaving);
     }
 
@@ -78,7 +79,7 @@ public class StaffController {
     // 1. GET PENDING CONTRACTS
 
     @GetMapping("/contract/pending")
-    public ResponseEntity getPendingContracts() {
+    public ResponseEntity getPendingContractRequests() {
         Users staff = authenticationService.getCurrentAccount();
         if (!staff.getRole().getRoleName().equalsIgnoreCase("staff")) {
             return ResponseEntity.status(403).body("Unauthorized");
@@ -99,7 +100,11 @@ public class StaffController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
         }
 
-        iContractService.verifyContract(contractId, decision);
+        try {
+            iContractService.verifyContract(contractId, decision);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         return ResponseEntity.status(200).body("Verify successfully");
     }

@@ -1,10 +1,12 @@
 package khoindn.swp391.be.app.service;
 
+import khoindn.swp391.be.app.exception.exceptions.GroupMemberNotFoundException;
 import khoindn.swp391.be.app.exception.exceptions.NoVehicleInGroupException;
 import khoindn.swp391.be.app.exception.exceptions.VehicleIsNotExistedException;
-import khoindn.swp391.be.app.pojo.MenuVehicleService;
-import khoindn.swp391.be.app.pojo.Vehicle;
+import khoindn.swp391.be.app.pojo.*;
+import khoindn.swp391.be.app.repository.IGroupMemberRepository;
 import khoindn.swp391.be.app.repository.IMenuVehicleServiceRepository;
+import khoindn.swp391.be.app.repository.IRequestVehicleServiceRepository;
 import khoindn.swp391.be.app.repository.IVehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,12 +16,18 @@ import java.util.List;
 
 @Service
 @Transactional
-public class VehicleService implements IVehicleService{
+public class VehicleService implements IVehicleService {
 
     @Autowired
     private IVehicleRepository iVehicleRepository;
     @Autowired
     private IMenuVehicleServiceRepository iMenuVehicleServiceRepository;
+    @Autowired
+    private AuthenticationService authenticationService;
+    @Autowired
+    private IGroupMemberRepository iGroupMemberRepository;
+    @Autowired
+    private IRequestVehicleServiceRepository iRequestVehicleServiceRepository;
 
     @Override
     public Vehicle addVehicle(Vehicle vehicle) {
@@ -61,7 +69,30 @@ public class VehicleService implements IVehicleService{
     }
 
     @Override
-    public List<MenuVehicleService> getAllVehicleServices() {
+    public List<MenuVehicleService> getMenuVehicleServices() {
         return iMenuVehicleServiceRepository.findAll();
     }
+
+    @Override
+    public RequestVehicleService requestVehicleService(int groupId, int serviceId) {
+        Users user = authenticationService.getCurrentAccount();
+        GroupMember gm = iGroupMemberRepository.findGroupMembersByUsers_IdAndGroup_GroupId(user.getId(), groupId);
+        if (gm == null) {
+            throw new GroupMemberNotFoundException("GROUP_NOT_FOUND");
+        }
+        RequestVehicleService vehicleService = new RequestVehicleService();
+        vehicleService.setGroupMember(gm);
+        vehicleService.setVehicle(iVehicleRepository.getVehiclesByGroup(gm.getGroup()));
+        vehicleService.setRequestVehicleServiceDetail(new RequestVehicleServiceDetail());
+        iRequestVehicleServiceRepository.save(vehicleService);
+
+        return vehicleService;
+    }
+
+    @Override
+    public List<RequestVehicleService> getAllRequestVehicleSerive() {
+        return iRequestVehicleServiceRepository.findAll();
+    }
+
+
 }

@@ -12,6 +12,7 @@ import khoindn.swp391.be.app.pojo._enum.StatusSchedule;
 import khoindn.swp391.be.app.repository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -411,5 +412,24 @@ public class ScheduleService implements IScheduleService {
         ));
     }
 
+    // automatic reset override
+    @Scheduled(cron = "0 0 0 1 * ?")
+    public void resetMonthlyOverrideTrackers() {
+        LocalDateTime startOfCurrentMonth = getStartOfMonth();
 
+        List<Schedule> oldTrackers = iScheduleRepository.findByStatusAndCreatedAtBefore(
+                StatusSchedule.OVERRIDE_TRACKER,
+                startOfCurrentMonth
+        );
+
+        if (!oldTrackers.isEmpty()) {
+            iScheduleRepository.deleteAll(oldTrackers);
+            System.out.println(String.format(
+                    "Monthly reset: Đã xóa %d bản ghi override tracker cũ (trước %s)",
+                    oldTrackers.size(),
+                    startOfCurrentMonth.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+            ));
+        }
+
+    }
 }

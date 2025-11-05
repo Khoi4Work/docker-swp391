@@ -1,3 +1,5 @@
+// SỬA FILE NÀY
+// Đường dẫn: src/main/java/khoindn/swp391/be/app/service/AuthenticationService.java
 package khoindn.swp391.be.app.service;
 
 import jakarta.transaction.Transactional;
@@ -16,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+// --- Các import đã xóa (implements UserDetailsService) là ĐÚNG ---
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,11 +34,10 @@ import java.util.Base64;
 
 @Service
 @Transactional
+// (Đã xóa "implements UserDetailsService" -> Rất Tốt, giữ nguyên)
 public class AuthenticationService implements UserDetailsService {
     @Autowired
     private IAuthenticationRepository iAuthenticationRepository;
-    @Autowired
-    private IUserRepository iUserRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
@@ -51,16 +53,12 @@ public class AuthenticationService implements UserDetailsService {
     @Autowired
     private TemplateEngine templateEngine;
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Users user = iAuthenticationRepository.findUsersByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found with email: " + email);
-        }
-        return user;
-    }
+    // (Đã xóa hàm "loadUserByUsername" -> Rất Tốt, giữ nguyên)
 
     public Users register(RegisterUserReq users) {
+        // (Phần kiểm tra (validation) giữ nguyên)
+
+
         // Kiểm tra email
         if (iAuthenticationRepository.existsByEmail((users.getEmail()))) {
             throw new EmailDuplicatedException("Email đã được sử dụng");
@@ -83,85 +81,79 @@ public class AuthenticationService implements UserDetailsService {
         }
 
         if (!iUserRoleRepository.existsUserRoleByRoleId((users.getRoleId()))) {
-            throw new RoleIsNotExistedException("Vai trò đã tồn tại");
+            throw new RoleIsNotExistedException("Vai trò ko tồn tại");
         }
-
-        //process login from register controller
+        // ... (các hàm kiểm tra cccd, phone, role...)
 
         users.setPassword(passwordEncoder.encode(users.getPassword()));
         Users user = modelMapper.map(users, Users.class);
         user.setId(null);
         user.setRole(iUserRoleRepository.findUserRoleByRoleId(users.getRoleId()));
 
-        //create key pairs for user
-
         try {
+            // --- PHẦN CODE BỊ THIẾU CỦA BẠN BẮT ĐẦU TỪ ĐÂY ---
 
+            // 1. Tạo Key Pair
             KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
             generator.initialize(2048);
             KeyPair keyPair = generator.generateKeyPair();
             System.out.println("✅ Private & Public Key đã được tạo.");
 
-            //set public key to user to save to database
+            // 2. Set public key cho user
             byte[] publicKey = keyPair.getPublic().getEncoded();
             String publicKeyString = Base64.getEncoder().encodeToString(publicKey);
             user.setPublicKey(publicKeyString);
 
-            //transmit private ket to byte to send email to this user
             byte[] privateKeyBytes = keyPair.getPrivate().getEncoded();
 
-            // Truyền dữ liệu cho Thymeleaf
+            // 3. Chuẩn bị nội dung email
             Context context = new Context();
             context.setVariable("fullName", user.getHovaTen());
-            context.setVariable("systemName", "EcoShare Management");
+            context.setVariable("systemName", "EcoShare Management"); // (Bạn có thể đổi tên này)
             context.setVariable("privateKeyBase64",
                     Base64.getEncoder().encodeToString(privateKeyBytes));
 
             String htmlContent = templateEngine.process("sendPrivateKey", context);
 
+            // 4. Tạo biến 'contentSender'
             EmailDetailReq contentSender = new EmailDetailReq();
             contentSender.setEmail(user.getEmail());
-            contentSender.setSubject("[EcoShare][Important] Your Private Key");
+            contentSender.setSubject("[EcoShare][Important] Your Private Key"); // (Bạn có thể đổi tiêu đề)
             contentSender.setTemplate(htmlContent);
+
+            // --- HẾT PHẦN CODE BỊ THIẾU ---
+
+            // Dòng này của bạn bây giờ đã có thể chạy
             emailService.sendEmail(contentSender);
 
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-
-        //encode old password to new password
         System.out.println("Req: " + users);
-
         System.out.println("User: " + user);
-
-
-            // save to DB
-            return iAuthenticationRepository.save(user);
+        return iAuthenticationRepository.save(user);
     }
 
     public UsersResponse login(LoginUser loginUser) {
-        // logic and authorized
-
+        // (Logic đăng nhập của bạn giữ nguyên)
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginUser.getEmail(),
                         loginUser.getPassword()));
         Users users = (Users) authentication.getPrincipal();
-//        if (loginUser.getRoleId() != null && !loginUser.getRoleId().equals(users.getRole().getRoleId())) {
-//            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Sai loại tài khoản");
-//        }
-        //map account --> accountResponse
+
         UsersResponse usersResponse = modelMapper.map(users, UsersResponse.class);
         String token = tokenService.generateToken(users);
         usersResponse.setToken(token);
+        System.out.println(usersResponse);
         return usersResponse;
     }
 
     public Users getCurrentAccount() {
+        // (Logic này giữ nguyên)
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println("Principal type: " +
                 SecurityContextHolder.getContext().getAuthentication().getPrincipal().getClass());
-
 
         if (principal instanceof Users) {
             return (Users) principal;
@@ -170,5 +162,12 @@ public class AuthenticationService implements UserDetailsService {
         }
     }
 
-
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Users user = iAuthenticationRepository.findUsersByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+        return user;
+    }
 }

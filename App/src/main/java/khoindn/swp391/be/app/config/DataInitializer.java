@@ -4,15 +4,12 @@ import khoindn.swp391.be.app.model.Request.RegisterUserReq;
 import khoindn.swp391.be.app.pojo.MenuVehicleService;
 import khoindn.swp391.be.app.pojo.UserRole;
 import khoindn.swp391.be.app.pojo.Users;
-import khoindn.swp391.be.app.pojo.Vehicle;
 import khoindn.swp391.be.app.repository.IMenuVehicleServiceRepository;
 import khoindn.swp391.be.app.service.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -63,61 +60,12 @@ public class DataInitializer implements CommandLineRunner {
             userRoleService.addUserRole(staffRole);
         }
 
-        if (vehicleService.findAll().isEmpty()) {
-            Vehicle v1 = new Vehicle();
-            v1.setPlateNo("29A-12345");
-            v1.setBrand("Tesla");
-            v1.setModel("Model S");
-            v1.setColor("Red");
-            v1.setBatteryCapacity(100);
-            v1.setCreatedAt(LocalDateTime.now());
-            v1.setPrice(150000); // thêm giá
-            vehicleService.addVehicle(v1);
 
-            Vehicle v2 = new Vehicle();
-            v2.setPlateNo("30B-67890");
-            v2.setBrand("VinFast");
-            v2.setModel("VF8");
-            v2.setColor("Blue");
-            v2.setBatteryCapacity(90);
-            v2.setCreatedAt(LocalDateTime.now());
-            v2.setPrice(80000); // thêm giá
-            vehicleService.addVehicle(v2);
-
-            Vehicle v3 = new Vehicle();
-            v3.setPlateNo("31C-54321");
-            v3.setBrand("Nissan");
-            v3.setModel("Leaf");
-            v3.setColor("White");
-            v3.setBatteryCapacity(60);
-            v3.setCreatedAt(LocalDateTime.now());
-            v3.setPrice(40000); // thêm giá
-            vehicleService.addVehicle(v3);
-
-            Vehicle v4 = new Vehicle();
-            v4.setPlateNo("32D-11223");
-            v4.setBrand("BYD");
-            v4.setModel("Han");
-            v4.setColor("Black");
-            v4.setBatteryCapacity(85);
-            v4.setCreatedAt(LocalDateTime.now());
-            v4.setPrice(35000); // thêm giá
-            vehicleService.addVehicle(v4);
-
-            Vehicle v5 = new Vehicle();
-            v5.setPlateNo("33E-44556");
-            v5.setBrand("Porsche");
-            v5.setModel("Taycan");
-            v5.setColor("Silver");
-            v5.setBatteryCapacity(93);
-            v5.setCreatedAt(LocalDateTime.now());
-            v5.setPrice(120000); // thêm giá
-            vehicleService.addVehicle(v5);
-        }
 
 
         if (userService.getAllUsers().isEmpty()) {
             UserRole role = userRoleService.findUserRoleByRoleId(1); // roleId = 1 như JSON của bạn
+            UserRole roleStaff = userRoleService.findUserRoleByRoleId(4); // roleId = 1 như JSON của bạn
 
             Users u1 = new Users();
             u1.setHovaTen("Ndnk");
@@ -143,6 +91,19 @@ public class DataInitializer implements CommandLineRunner {
             RegisterUserReq ur2 = modelMapper.map(u2, RegisterUserReq.class);
             authenticationService.register(ur2);
 
+            Users staff = new Users();
+            staff.setHovaTen("staff");
+            staff.setEmail("staff@gmail.com");
+            staff.setPassword("1234"); // mã hóa mật khẩu
+            staff.setCccd("123123");
+            staff.setGplx("123123");
+            staff.setPhone("0966893650");
+            staff.setRole(roleStaff);
+
+            RegisterUserReq urstaff = modelMapper.map(staff, RegisterUserReq.class);
+            authenticationService.register(urstaff);
+
+
 //            Users u3 = new Users();
 //            u3.setHovaTen("lamvantuan");
 //            u3.setEmail("tlamvantuan@gmail.com");
@@ -166,9 +127,12 @@ public class DataInitializer implements CommandLineRunner {
 //
 //            RegisterUserReq ur4 = modelMapper.map(u4, RegisterUserReq.class);
 //            authenticationService.register(ur4);
+
+
+
         }
 
-        if (iVehicleService.getAllVehicleServices().isEmpty()) {
+        if (iVehicleService.getMenuVehicleServices().isEmpty()) {
             // Car wash service
             MenuVehicleService washService = new MenuVehicleService();
             washService.setServiceName("Car Wash");

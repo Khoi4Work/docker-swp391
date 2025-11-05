@@ -56,13 +56,10 @@ public class ContractController {
     }
 
     // Tạo/Set contract
-    @PostMapping("/set")
-    public ResponseEntity<ContractSigner> setContract(@RequestBody @Valid ContractDecisionReq req)
+    @PostMapping(value = "/set", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ContractSigner> setContract(@ModelAttribute @Valid ContractDecisionReq req)
             throws
-            InvalidKeySpecException,
-            NoSuchAlgorithmException,
-            SignatureException,
-            InvalidKeyException {
+            Exception {
 
         ContractSigner contractResult = iContractService.setContract(req);
         if (contractResult == null) {
@@ -74,7 +71,7 @@ public class ContractController {
 
 
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<List<ContractSigner>> createContract(@RequestBody @Valid ContractCreateReq req)
+    public ResponseEntity<List<ContractSigner>> createContract(@ModelAttribute @Valid ContractCreateReq req)
             throws Exception {
         System.out.println(req);
         List<ContractSigner> contractResult = iContractService.createContract(req);

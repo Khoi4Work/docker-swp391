@@ -1,12 +1,10 @@
 package khoindn.swp391.be.app.model.Request;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @AllArgsConstructor
@@ -24,9 +22,9 @@ public class ContractDecisionReq {
     private int idChoice;
 
     @NotBlank
-    private String contractContent;
-
-    @NotBlank
     private String contract_signature;
+
+    @NotNull
+    private MultipartFile contractContent;
 
 }

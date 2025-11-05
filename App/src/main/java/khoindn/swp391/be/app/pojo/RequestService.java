@@ -37,6 +37,6 @@ public class RequestService {
 
     @ManyToOne
     @JoinColumn(name = "service")
-    private MenuService menuService;
+    private MenuVehicleService menuService;
 
 }

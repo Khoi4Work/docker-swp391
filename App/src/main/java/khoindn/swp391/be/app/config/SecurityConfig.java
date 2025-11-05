@@ -1,3 +1,4 @@
+
 package khoindn.swp391.be.app.config;
 
 import khoindn.swp391.be.app.service.AuthenticationService;
@@ -13,16 +14,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 public class SecurityConfig {
-    @Autowired
-    AuthenticationService authenticationService;
+
     @Autowired
     Filter filter;
+
     @Autowired
-    CorsConfig corsConfig;
+    CorsConfig corsConfig; // <--- Dòng này sẽ hết mờ sau khi bạn sửa ????????????
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -36,11 +37,11 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationService authenticationService) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
                 .authorizeHttpRequests(req -> req
-                        // THÊM whitelist cho Swagger + chat + auth
                         .requestMatchers(
                                 "/**"
                         ).permitAll()
@@ -51,5 +52,4 @@ public class SecurityConfig {
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
 }

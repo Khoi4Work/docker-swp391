@@ -39,8 +39,6 @@ public class GroupService implements IGroupService {
     @Autowired
     private IContractRepository iContractRepository;
     @Autowired
-    private ICommonFundRepository commonFundRepository;
-    @Autowired
     private ModelMapper modelMapper;
     @Autowired
     private IRequestGroupServiceRepository iRequestGroupServiceRepository;
@@ -63,11 +61,7 @@ public class GroupService implements IGroupService {
         group.setDescription("This group was created when registering vehicle ");
         group.setCreatedAt(LocalDateTime.now());
         iGroupRepository.save(group);
-        // tu dong tao common fund cho group
-        CommonFund commonFund = new CommonFund();
-        commonFund.setGroup(group);
-        commonFund.setBalance(BigDecimal.ZERO);
-        commonFundRepository.save(commonFund);
+
 
         Contract contract = iContractRepository.findContractByContractId(request.getContractId());
         contract.setGroup(group);

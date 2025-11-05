@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
@@ -56,6 +57,7 @@ public class ContractService implements IContractService {
     private SupabaseService supabaseService;
     @Autowired
     private ISupabaseService iSupabaseService;
+    private AuthenticationService authenticationService;
 
 
     @Override
@@ -70,15 +72,14 @@ public class ContractService implements IContractService {
     @Override
     public ContractSigner setContract(ContractDecisionReq req)
             throws
-            InvalidKeySpecException,
-            NoSuchAlgorithmException,
-            SignatureException,
-            InvalidKeyException {
+            Exception {
 
         System.out.println("Update contract...");
 
         Users user = iUserRepository.findUsersById(req.getIdUser());
-        System.out.println(user);
+        System.out.println(user.getPublicKey());
+        System.out.println(req.getContract_signature());
+        System.out.println(req.getContractContent());
 
         //Parse privateKey va publicKey sang byte
 
@@ -160,7 +161,12 @@ public class ContractService implements IContractService {
             } else if (stillPending) {
                 contract.setStatus(StatusContract.WAITING_CONFIRMATION);
             }
-            contract.setHtmlString(req.getContractContent());
+            if (supabaseService.isFileExist(req.getContractContent().getOriginalFilename())) {
+                contract.setHtmlString(supabaseService.getFileUrl(req.getContractContent().getOriginalFilename()));
+            } else {
+                contract.setHtmlString(supabaseService.uploadFile(req.getContractContent()));
+
+            }
             iContractRepository.save(contract);
 
 
@@ -181,7 +187,11 @@ public class ContractService implements IContractService {
         contract.setContractType(req.getContractType());
         contract.setStartDate(LocalDate.now());
         contract.setUrlConfirmedContract(req.getDocumentUrl());
-        contract.setImageContract(supabaseService.uploadFile(req.getImageContract()));
+        if (supabaseService.isFileExist(req.getImageContract().getOriginalFilename())) {
+            contract.setImageContract(supabaseService.getFileUrl(req.getImageContract().getOriginalFilename()));
+        } else {
+            contract.setImageContract(supabaseService.uploadFile(req.getImageContract()));
+        }
 
         iContractRepository.save(contract);
 
@@ -262,9 +272,9 @@ public class ContractService implements IContractService {
             pendingRes.setContract(contract);
             pendingRes.setContractSignerList(
                     signerList
-                    .stream()
-                    .map(ContractSigner::getUser)
-                    .toList()
+                            .stream()
+                            .map(ContractSigner::getUser)
+                            .toList()
             );
             contractPendingRes.add(pendingRes);
         }
@@ -343,11 +353,13 @@ public class ContractService implements IContractService {
         }
         if (decision == 1) {
             contract.setStatus(StatusContract.WAITING_CONFIRMATION);
+            contract.setStaff(authenticationService.getCurrentAccount());
             iContractRepository.save(contract);
             SendWaitingConfirmedContract(contractId);
         } else if (decision == 0) {
             contract.setStatus(StatusContract.DECLINED);
             contract.setEndDate(LocalDate.now());
+            contract.setStaff(authenticationService.getCurrentAccount());
             iContractRepository.save(contract);
             sendDeclinedContractNotification(contractId);
         } else {

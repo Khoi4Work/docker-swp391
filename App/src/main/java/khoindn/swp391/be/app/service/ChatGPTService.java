@@ -20,11 +20,11 @@ public class ChatGPTService {
 
     private static final Logger log = LoggerFactory.getLogger(ChatGPTService.class);
 
-    private final LlmClientService llmClientService;
+    private final ILlmClientService ILlmClientService;
     private final KnowledgeSearchService knowledgeSearchService;
 
-    public ChatGPTService(LlmClientService llmClientService, KnowledgeSearchService knowledgeSearchService) {
-        this.llmClientService = llmClientService;
+    public ChatGPTService(ILlmClientService ILlmClientService, KnowledgeSearchService knowledgeSearchService) {
+        this.ILlmClientService = ILlmClientService;
         this.knowledgeSearchService = knowledgeSearchService;
     }
 
@@ -77,7 +77,7 @@ public class ChatGPTService {
         String reply;
         Integer promptT = null, completionT = null, totalT = null;
         try {
-            LlmResult result = llmClientService.chat(messages);
+            LlmResult result = ILlmClientService.chat(messages);
             reply = (result != null && result.firstText() != null)
                     ? result.firstText()
                     : (hasAnyContext

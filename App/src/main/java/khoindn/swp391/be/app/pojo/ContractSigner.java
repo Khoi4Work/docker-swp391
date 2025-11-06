@@ -1,6 +1,7 @@
 package khoindn.swp391.be.app.pojo;
-
 import jakarta.persistence.*;
+import khoindn.swp391.be.app.pojo.Contract;
+import khoindn.swp391.be.app.pojo.Users;
 import khoindn.swp391.be.app.pojo._enum.DecisionContractSigner;
 import lombok.AllArgsConstructor;
 import lombok.Data;

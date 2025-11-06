@@ -1,7 +1,6 @@
 package khoindn.swp391.be.app.model.Response;
 
 import lombok.Data;
-
 import java.time.LocalDateTime;
 import java.util.List;
 

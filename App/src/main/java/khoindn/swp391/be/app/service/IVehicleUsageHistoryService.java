@@ -1,8 +1,7 @@
 package khoindn.swp391.be.app.service;
 
-import khoindn.swp391.be.app.model.Response.UsageHistoryDetailResponse;
 import khoindn.swp391.be.app.model.Response.UsageHistoryListResponse;
-
+import khoindn.swp391.be.app.model.Response.UsageHistoryDetailResponse;
 import java.util.List;
 
 public interface IVehicleUsageHistoryService {

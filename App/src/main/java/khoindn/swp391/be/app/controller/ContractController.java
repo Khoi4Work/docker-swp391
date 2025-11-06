@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import khoindn.swp391.be.app.model.Request.ContractCreateReq;
 import khoindn.swp391.be.app.model.Request.ContractDecisionReq;
+import khoindn.swp391.be.app.model.Request.SendBulkEmailReq;
 import khoindn.swp391.be.app.model.Response.ContractHistoryRes;
 import khoindn.swp391.be.app.model.Response.RenderContractRes;
 import khoindn.swp391.be.app.pojo.*;
@@ -13,9 +14,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Comparator;
-import java.util.List;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.*;
 
 
 @RestController
@@ -33,6 +38,10 @@ public class ContractController {
     private IGroupMemberService iGroupMemberService;
     @Autowired
     private IVehicleService iVehicleService;
+    @Autowired
+    private IEmailService iEmailService;
+    @Autowired
+    private SupabaseService supabaseService;
     @Autowired
     private ISupabaseService iSupabaseService;
 

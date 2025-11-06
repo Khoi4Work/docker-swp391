@@ -1,6 +1,7 @@
 package khoindn.swp391.be.app.model.Response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

@@ -2,6 +2,7 @@ package khoindn.swp391.be.app.service;
 
 import khoindn.swp391.be.app.exception.exceptions.*;
 import khoindn.swp391.be.app.model.Request.CheckOutRequest;
+import khoindn.swp391.be.app.model.Response.CheckInResponse;
 import khoindn.swp391.be.app.model.Response.CheckOutResponse;
 import khoindn.swp391.be.app.pojo.CheckIn;
 import khoindn.swp391.be.app.pojo.CheckOut;

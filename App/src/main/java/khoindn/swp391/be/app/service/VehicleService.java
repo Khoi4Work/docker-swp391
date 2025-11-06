@@ -1,6 +1,7 @@
 package khoindn.swp391.be.app.service;
 
 import khoindn.swp391.be.app.exception.exceptions.GroupMemberNotFoundException;
+import khoindn.swp391.be.app.exception.exceptions.NoVehicleInGroupException;
 import khoindn.swp391.be.app.exception.exceptions.VehicleIsNotExistedException;
 import khoindn.swp391.be.app.pojo.*;
 import khoindn.swp391.be.app.repository.IGroupMemberRepository;

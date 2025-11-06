@@ -1,11 +1,14 @@
 package khoindn.swp391.be.app.model.Request;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import khoindn.swp391.be.app.pojo.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.NumberFormat;
+
+import javax.management.relation.Role;
 
 @Data
 @AllArgsConstructor

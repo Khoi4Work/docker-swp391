@@ -160,15 +160,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- Fix UTF-8 for resources -->
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.3.1</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-
             <!-- Optional: Compiler plugin -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>

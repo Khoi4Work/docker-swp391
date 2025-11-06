@@ -53,6 +53,9 @@ public class Vehicle {
     @JoinColumn(name = "group_id", referencedColumnName = "group_id")
     private Group group;
 
+    @OneToOne
+    private Contract contract;
+
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<RequestVehicleService> requestVehicleServices = new ArrayList<>();

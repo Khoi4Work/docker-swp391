@@ -16,8 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 public class GroupCreateReq {
 
-    @NotNull(message = "Vehicle ID cannot be null")
-    private Integer vehicleId;
     @NotNull(message = "Contract ID cannot be null")
     private Integer contractId;
     @NotBlank(message = "url is needed!!")

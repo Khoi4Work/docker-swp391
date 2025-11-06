@@ -48,7 +48,7 @@ public class CheckInService implements ICheckInService {
                     "Schedule này đã được check-in rồi. Không thể check-in lần nữa."
             );
         }
-        // check userId to use check in or check out
+        // check idUsers to use check in or check out
         int scheduleOwnerId = schedule.getGroupMember().getUsers().getId();
         if (scheduleOwnerId != req.getUserId()) {
             throw new UnauthorizedAccessException(

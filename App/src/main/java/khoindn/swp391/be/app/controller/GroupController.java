@@ -37,8 +37,7 @@ public class GroupController {
     private IGroupMemberService iGroupMemberService;
 
     @PostMapping("/create")
-    public ResponseEntity<RegisterVehicleRes> createGroup
-            (@RequestBody @Valid GroupCreateReq request) {
+    public ResponseEntity<RegisterVehicleRes> createGroup(@RequestBody @Valid GroupCreateReq request) {
         RegisterVehicleRes group = iGroupService.addMemberToGroupByContract(request);
         return ResponseEntity.status(201).body(group); // 201 Created
     }

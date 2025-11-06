@@ -67,7 +67,7 @@ public class GroupService implements IGroupService {
         contract.setGroup(group);
         iContractRepository.save(contract);
         // Tim vehicle
-        Vehicle vehicle = iVehicleRepository.getVehiclesByVehicleId(request.getVehicleId());
+        Vehicle vehicle = iVehicleRepository.getVehiclesByContract_ContractId(request.getContractId());
         if (vehicle == null) {
             throw new VehicleIsNotExistedException("This Vehicle does not exist");
         } else if (vehicle.getGroup() != null) {

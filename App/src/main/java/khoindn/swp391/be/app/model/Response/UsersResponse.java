@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UsersResponse {
     int id;
-    String hovaten;
+    String hovaTen;
     String email;
     String cccd;
     String gplx;

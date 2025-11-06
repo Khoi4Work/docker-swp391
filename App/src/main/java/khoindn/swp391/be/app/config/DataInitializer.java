@@ -77,6 +77,7 @@ public class DataInitializer implements CommandLineRunner {
             u1.setRole(role);
 
             RegisterUserReq ur1 = modelMapper.map(u1, RegisterUserReq.class);
+            ur1.setRoleId(role.getRoleId());
             authenticationService.register(ur1);
 
             Users u2 = new Users();
@@ -89,6 +90,7 @@ public class DataInitializer implements CommandLineRunner {
             u2.setRole(role);
 
             RegisterUserReq ur2 = modelMapper.map(u2, RegisterUserReq.class);
+            ur2.setRoleId(role.getRoleId());
             authenticationService.register(ur2);
 
             Users staff = new Users();
@@ -101,6 +103,7 @@ public class DataInitializer implements CommandLineRunner {
             staff.setRole(roleStaff);
 
             RegisterUserReq urstaff = modelMapper.map(staff, RegisterUserReq.class);
+            urstaff.setRoleId(roleStaff.getRoleId());
             authenticationService.register(urstaff);
 
 

@@ -1,5 +1,3 @@
-// SỬA FILE NÀY
-// Đường dẫn: src/main/java/khoindn/swp391/be/app/service/AuthenticationService.java
 package khoindn.swp391.be.app.service;
 
 import jakarta.transaction.Transactional;
@@ -10,7 +8,6 @@ import khoindn.swp391.be.app.model.Request.RegisterUserReq;
 import khoindn.swp391.be.app.model.Response.UsersResponse;
 import khoindn.swp391.be.app.pojo.Users;
 import khoindn.swp391.be.app.repository.IAuthenticationRepository;
-import khoindn.swp391.be.app.repository.IUserRepository;
 import khoindn.swp391.be.app.repository.IUserRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +15,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-// --- Các import đã xóa (implements UserDetailsService) là ĐÚNG ---
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -53,7 +49,6 @@ public class AuthenticationService implements UserDetailsService {
     @Autowired
     private TemplateEngine templateEngine;
 
-    // (Đã xóa hàm "loadUserByUsername" -> Rất Tốt, giữ nguyên)
 
     public Users register(RegisterUserReq users) {
         // (Phần kiểm tra (validation) giữ nguyên)
@@ -81,6 +76,7 @@ public class AuthenticationService implements UserDetailsService {
         }
 
         if (!iUserRoleRepository.existsUserRoleByRoleId((users.getRoleId()))) {
+            System.out.println(users.getRoleId());
             throw new RoleIsNotExistedException("Vai trò ko tồn tại");
         }
         // ... (các hàm kiểm tra cccd, phone, role...)
@@ -91,7 +87,6 @@ public class AuthenticationService implements UserDetailsService {
         user.setRole(iUserRoleRepository.findUserRoleByRoleId(users.getRoleId()));
 
         try {
-            // --- PHẦN CODE BỊ THIẾU CỦA BẠN BẮT ĐẦU TỪ ĐÂY ---
 
             // 1. Tạo Key Pair
             KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
@@ -121,7 +116,6 @@ public class AuthenticationService implements UserDetailsService {
             contentSender.setSubject("[EcoShare][Important] Your Private Key"); // (Bạn có thể đổi tiêu đề)
             contentSender.setTemplate(htmlContent);
 
-            // --- HẾT PHẦN CODE BỊ THIẾU ---
 
             // Dòng này của bạn bây giờ đã có thể chạy
             emailService.sendEmail(contentSender);

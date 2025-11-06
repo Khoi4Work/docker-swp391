@@ -7,12 +7,7 @@ import khoindn.swp391.be.app.model.Response.ContractPendingRes;
 import khoindn.swp391.be.app.pojo.Contract;
 import khoindn.swp391.be.app.pojo.ContractSigner;
 import khoindn.swp391.be.app.pojo.Users;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SignatureException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
 public interface IContractService {
@@ -37,6 +32,6 @@ public interface IContractService {
 
     void sendDeclinedContractNotification(int contractId) throws Exception;
 
-    void verifyContract(int contractId, int decision) throws Exception;
+    void verifyContract(int contractId, int decision, Users staff) throws Exception;
 
 }

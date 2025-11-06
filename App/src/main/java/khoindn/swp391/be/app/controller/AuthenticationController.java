@@ -17,7 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:8081")
 @SecurityRequirement(name = "api")
 public class AuthenticationController {

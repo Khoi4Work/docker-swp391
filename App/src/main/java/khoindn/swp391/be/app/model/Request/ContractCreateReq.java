@@ -1,7 +1,5 @@
 package khoindn.swp391.be.app.model.Request;
 
-import jakarta.mail.Multipart;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -9,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.NumberFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -26,7 +23,7 @@ public class ContractCreateReq {
     @NotBlank(message = "Can't get contractType!!")
     private String contractType;
     @NotEmpty(message = "UserId list cannot be empty")
-    public List<Integer> userId;
+    public List<Integer> idUsers;
 
     @NotNull
     private MultipartFile imageContract;

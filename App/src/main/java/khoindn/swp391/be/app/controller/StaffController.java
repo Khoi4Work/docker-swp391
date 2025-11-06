@@ -26,11 +26,11 @@ public class StaffController {
     @Autowired
     private IRequestGroupService iRequestGroupService;
     @Autowired
-    private AuthenticationService authenticationService;
-    @Autowired
     private IContractService iContractService;
     @Autowired
     private IStaffService iStaffService;
+    @Autowired
+    private AuthenticationService authenticationService;
 
     // DELETE GROUP
 
@@ -95,15 +95,16 @@ public class StaffController {
 
     @PatchMapping("/contract/{contractId}/{decision}")
     public ResponseEntity verifyContract(@PathVariable int contractId, @PathVariable int decision) throws Exception {
+        System.out.println("verifying...");
         Users staff = authenticationService.getCurrentAccount();
         if (!staff.getRole().getRoleName().equalsIgnoreCase("staff")) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
         }
 
         try {
-            iContractService.verifyContract(contractId, decision);
+            iContractService.verifyContract(contractId, decision, staff);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e + " error during verifying!");
         }
 
         return ResponseEntity.status(200).body("Verify successfully");

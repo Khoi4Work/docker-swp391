@@ -22,7 +22,7 @@ public class SecurityConfig {
     Filter filter;
 
     @Autowired
-    CorsConfig corsConfig; // <--- Dòng này sẽ hết mờ sau khi bạn sửa ????????????
+    CorsConfig corsConfig;
 
 
     @Bean

@@ -2,7 +2,9 @@ package khoindn.swp391.be.app.pojo;
 
 import jakarta.persistence.*;
 import khoindn.swp391.be.app.pojo._enum.StatusSchedule;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 

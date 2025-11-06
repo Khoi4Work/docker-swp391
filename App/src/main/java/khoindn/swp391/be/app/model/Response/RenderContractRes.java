@@ -1,6 +1,5 @@
 package khoindn.swp391.be.app.model.Response;
 
-import khoindn.swp391.be.app.pojo.Contract;
 import khoindn.swp391.be.app.pojo.ContractSigner;
 import khoindn.swp391.be.app.pojo.GroupMember;
 import khoindn.swp391.be.app.pojo.Vehicle;

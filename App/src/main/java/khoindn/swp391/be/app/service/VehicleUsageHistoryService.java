@@ -1,14 +1,13 @@
 package khoindn.swp391.be.app.service;
 
 import khoindn.swp391.be.app.exception.exceptions.ScheduleNotFoundException;
-import khoindn.swp391.be.app.model.Response.UsageHistoryListResponse;
 import khoindn.swp391.be.app.model.Response.UsageHistoryDetailResponse;
-import khoindn.swp391.be.app.pojo.CheckIn;
-import khoindn.swp391.be.app.pojo.CheckOut;
-import khoindn.swp391.be.app.pojo.Schedule;
-import khoindn.swp391.be.app.pojo.Vehicle;
-import khoindn.swp391.be.app.pojo.Users;
-import khoindn.swp391.be.app.repository.*;
+import khoindn.swp391.be.app.model.Response.UsageHistoryListResponse;
+import khoindn.swp391.be.app.pojo.*;
+import khoindn.swp391.be.app.repository.ICheckInRepository;
+import khoindn.swp391.be.app.repository.ICheckOutRepository;
+import khoindn.swp391.be.app.repository.IScheduleRepository;
+import khoindn.swp391.be.app.repository.IVehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

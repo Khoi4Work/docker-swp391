@@ -1,7 +1,6 @@
 package khoindn.swp391.be.app.repository;
 
 import khoindn.swp391.be.app.pojo.Contract;
-import khoindn.swp391.be.app.pojo.ContractSigner;
 import khoindn.swp391.be.app.pojo._enum.StatusContract;
 import org.springframework.data.jpa.repository.JpaRepository;
 

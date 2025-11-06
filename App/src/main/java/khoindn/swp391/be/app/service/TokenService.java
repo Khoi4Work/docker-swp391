@@ -9,9 +9,9 @@ import khoindn.swp391.be.app.pojo.Users;
 import khoindn.swp391.be.app.repository.IAuthenticationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.nio.charset.StandardCharsets;
-import javax.crypto.SecretKey;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.function.Function;
 

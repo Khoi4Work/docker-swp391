@@ -1,8 +1,8 @@
 package khoindn.swp391.be.app.controller;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import khoindn.swp391.be.app.model.Response.UsageHistoryListResponse;
 import khoindn.swp391.be.app.model.Response.UsageHistoryDetailResponse;
+import khoindn.swp391.be.app.model.Response.UsageHistoryListResponse;
 import khoindn.swp391.be.app.service.IVehicleUsageHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,5 @@
 package khoindn.swp391.be.app.repository;
 
-import khoindn.swp391.be.app.model.Response.ScheduleRes;
 import khoindn.swp391.be.app.pojo.Schedule;
 import khoindn.swp391.be.app.pojo._enum.StatusSchedule;
 import org.springframework.data.jpa.repository.JpaRepository;

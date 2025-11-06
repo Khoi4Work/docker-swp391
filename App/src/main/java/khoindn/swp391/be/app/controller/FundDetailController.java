@@ -2,8 +2,9 @@ package khoindn.swp391.be.app.controller;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletResponse;
-import khoindn.swp391.be.app.model.Response.*;
-import khoindn.swp391.be.app.pojo.FundDetail;
+import khoindn.swp391.be.app.model.Response.FundFeeResponse;
+import khoindn.swp391.be.app.model.Response.FundPaymentResponse;
+import khoindn.swp391.be.app.model.Response.GroupFeeResponse;
 import khoindn.swp391.be.app.service.IFundDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

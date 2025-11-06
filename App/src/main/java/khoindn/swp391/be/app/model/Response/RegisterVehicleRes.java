@@ -1,12 +1,11 @@
 package khoindn.swp391.be.app.model.Response;
 
 import khoindn.swp391.be.app.model.formatReq.ResponseVehicleRegisteration;
-import khoindn.swp391.be.app.pojo.*;
+import khoindn.swp391.be.app.pojo.Group;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data

@@ -52,7 +52,7 @@ public class CorsConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:8081")); // FE origin
+        config.setAllowedOrigins(List.of("http://localhost:8081","https://swp391-ashy.vercel.app", "https://swp391-git-main-khois-projects-1eda0cf5.vercel.app")); // FE origin
         config.setAllowedMethods(List.of("*"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.setAllowCredentials(true);

@@ -47,6 +47,17 @@ public class VehicleUsageHistoryService implements IVehicleUsageHistoryService {
     }
 
     @Override
+    public List<UsageHistoryListResponse> getUsageHistoryListByGroupId(int groupId) {
+        List<Schedule> schedules = iScheduleRepository.findByGroupMember_Group_GroupId(groupId);
+
+        // Filter by user and sort by date (newest first)
+        return schedules.stream()
+                .sorted((a, b) -> b.getStartTime().compareTo(a.getStartTime()))
+                .map(this::convertToListResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public UsageHistoryDetailResponse getUsageHistoryDetail(int scheduleId) {
         Schedule schedule = iScheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new ScheduleNotFoundException(

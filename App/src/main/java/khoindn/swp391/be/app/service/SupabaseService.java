@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -77,33 +79,27 @@ public class SupabaseService implements ISupabaseService {
     }
 
     @Override
-    public void deleteFile(String fileName) throws Exception {
-        String bucket = "uploadsPDF";
-
-        URL url = new URL(SUPABASE_URL+bucket);
+    public void deleteFile(String link) throws Exception {
+        String fileName = link.substring(link.lastIndexOf('/') + 1);
+        // ✅ Endpoint đúng: DELETE /object/<bucket>/<fileName>
+        URL url = new URL(SUPABASE_URL + fileName);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
         conn.setRequestMethod("DELETE");
         conn.setRequestProperty("Authorization", "Bearer " + SUPABASE_KEY);
         conn.setRequestProperty("apikey", SUPABASE_KEY);
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setDoOutput(true);
-
-        // Body phải là mảng JSON chứa đường dẫn file (tương đối trong bucket)
-        String jsonBody = "[\"" + fileName + "\"]";
-
-        try (var os = conn.getOutputStream()) {
-            byte[] input = jsonBody.getBytes("utf-8");
-            os.write(input, 0, input.length);
-        }
 
         int responseCode = conn.getResponseCode();
         if (responseCode != 200 && responseCode != 204) {
-            throw new RuntimeException("Xóa file thất bại, code: " + responseCode);
+            try (var reader = new BufferedReader(new InputStreamReader(conn.getErrorStream()))) {
+                System.err.println(reader.lines().reduce("", (a, b) -> a + b));
+            }
+            throw new RuntimeException("❌ Xóa file thất bại, code: " + responseCode);
         } else {
             System.out.println("✅ File deleted successfully: " + fileName);
         }
     }
+
 
 
 }

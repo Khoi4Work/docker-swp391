@@ -3,9 +3,7 @@ package khoindn.swp391.be.app.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import khoindn.swp391.be.app.pojo._enum.StatusGroup;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,14 +27,17 @@ public class Group {
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
     @Column
+    @Enumerated(EnumType.STRING)
     private StatusGroup status = StatusGroup.ACTIVE; // active by default
     // Relationships
 
     @OneToMany(mappedBy = "group")
     @JsonIgnore
+    @ToString.Exclude
     private List<GroupMember> groupMembers = new ArrayList<>();
     @OneToMany(mappedBy = "group")
     @JsonIgnore
-    private  List<Vehicle> vehicles = new ArrayList<>();
+    @ToString.Exclude
+    private List<Vehicle> vehicles = new ArrayList<>();
 
 }

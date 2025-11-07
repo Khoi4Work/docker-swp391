@@ -20,7 +20,7 @@ public class DecisionVote{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "decision_name", unique = true)
+    @Column(name = "decision_name")
     private String decisionName; // Maintenance, Insurance, Battery / Energy, Financial
     @Column(name = "description")
     private String description;
@@ -36,6 +36,6 @@ public class DecisionVote{
     @JoinColumn(name = "created_by")
     private GroupMember createdBy;
 
-    @OneToMany(mappedBy = "decisionVote")
-    List<DecisionVoteDetail> decisionVoteDetails = new ArrayList<>();
+    @OneToMany(mappedBy = "decisionVote", cascade = CascadeType.ALL)
+    List<DecisionVoteDetail> decisionVoteDetails= new ArrayList<>();
 }

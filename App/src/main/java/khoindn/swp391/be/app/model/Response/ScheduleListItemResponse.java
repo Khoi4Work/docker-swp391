@@ -11,6 +11,7 @@ public class ScheduleListItemResponse {
     private int scheduleId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private int userId;
 
     // Vehicle info
     private String vehicleName;

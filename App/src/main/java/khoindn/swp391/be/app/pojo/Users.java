@@ -19,7 +19,7 @@ import java.util.List;
 @Data
 @Table(name = "users")
 @NoArgsConstructor
-@ToString(exclude = {"role", "userOfGroupMember"})
+@ToString(exclude = {"userOfGroupMember"})
 @AllArgsConstructor
 public class Users implements UserDetails {
     //attributes

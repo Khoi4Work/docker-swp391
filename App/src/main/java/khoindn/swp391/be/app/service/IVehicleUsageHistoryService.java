@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface IVehicleUsageHistoryService {
     List<UsageHistoryListResponse> getUsageHistoryList(int userId, int groupId);
+    List<UsageHistoryListResponse> getUsageHistoryListByGroupId( int groupId);
+
     UsageHistoryDetailResponse getUsageHistoryDetail(int scheduleId);
 }

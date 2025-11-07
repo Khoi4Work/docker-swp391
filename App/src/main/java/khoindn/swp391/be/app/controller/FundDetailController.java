@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletResponse;
 import khoindn.swp391.be.app.model.Response.*;
 import khoindn.swp391.be.app.pojo.FundDetail;
+import khoindn.swp391.be.app.repository.IFundDetailRepository;
 import khoindn.swp391.be.app.service.IFundDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,8 @@ public class FundDetailController {
 
     @Autowired
     private IFundDetailService fundDetailService;
+    @Autowired
+    private IFundDetailRepository fundDetailRepository;
 
     // ===== 1. TẠO PAYMENT URL VNPAY =====
     @PostMapping("/{fundDetailId}/create-payment")
@@ -53,6 +56,20 @@ public class FundDetailController {
         response.sendRedirect(redirectUrl);
     }
 
+    @PostMapping("/set-overdue/{feeId}")
+    public ResponseEntity<String> setOverdueImmediately(@PathVariable Integer feeId) {
+        fundDetailRepository.findById(feeId).ifPresentOrElse(
+                fee -> {
+                    fee.setIsOverdue(true);
+                    fundDetailRepository.save(fee);
+                    System.out.println("Fee " + feeId + " marked as overdue");
+                },
+                () -> {
+                    throw new RuntimeException("Fee not found");
+                }
+        );
+        return ResponseEntity.ok("Fee " + feeId + " is now overdue");
+    }
 
     @GetMapping("/group/{groupId}/current-month")
     public ResponseEntity<GroupFeeResponse> getGroupFeeDetails(

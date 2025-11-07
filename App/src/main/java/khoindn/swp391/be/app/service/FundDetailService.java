@@ -50,7 +50,10 @@ public class FundDetailService implements IFundDetailService {
     @Override
     @Transactional
     @Scheduled(cron = "0 0 0 1 * *")
+//    @Scheduled(fixedRate = 10000)  //  10 giây, dùng tạm thời
+
     public void generateMonthlyFeesForAllGroups() {
+        System.out.println("Running");
         String currentMonthYear = YearMonth.now().format(DateTimeFormatter.ofPattern("yyyy-MM"));
 
         groupRepository.findAll().forEach(group -> {
@@ -208,6 +211,7 @@ public class FundDetailService implements IFundDetailService {
         return toFundFeeResponse(fee);
     }
 
+
     @Override
     @Transactional
     public void payFeeDirectly(Integer fundDetailId) {
@@ -251,5 +255,16 @@ public class FundDetailService implements IFundDetailService {
         response.setDueDate(fee.getDueDate());
         response.setCreatedAt(fee.getCreatedAt());
         return response;
+    }
+
+    // test
+    @Override
+    public FundDetail findById(int id) {
+        return fundDetailRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public FundDetail addFund(FundDetail fundDetail) {
+        return fundDetailRepository.save(fundDetail);
     }
 }

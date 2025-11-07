@@ -30,7 +30,6 @@ import java.util.Base64;
 
 @Service
 @Transactional
-// (Đã xóa "implements UserDetailsService" -> Rất Tốt, giữ nguyên)
 public class AuthenticationService implements UserDetailsService {
     @Autowired
     private IAuthenticationRepository iAuthenticationRepository;
@@ -144,7 +143,6 @@ public class AuthenticationService implements UserDetailsService {
     }
 
     public Users getCurrentAccount() {
-        // (Logic này giữ nguyên)
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println("Principal type: " +
                 SecurityContextHolder.getContext().getAuthentication().getPrincipal().getClass());

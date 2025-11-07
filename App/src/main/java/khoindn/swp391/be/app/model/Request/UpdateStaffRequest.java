@@ -1,4 +1,4 @@
-// trong /model/Request/UpdateStaffRequest.java
+
 package khoindn.swp391.be.app.model.Request;
 
 import lombok.Data;
@@ -7,5 +7,6 @@ import lombok.Data;
 public class UpdateStaffRequest {
     private String hovaTen;
     private String cccd;
+    private String gplx;
     private String phone;
 }

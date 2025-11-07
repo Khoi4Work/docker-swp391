@@ -18,7 +18,7 @@ public class VehicleRes {
     private String color;
     private int batteryCapacity;
     private LocalDateTime createdAt;
-    private int price;
+    private float price;
     private String imageUrl;
 
     // Thông tin group

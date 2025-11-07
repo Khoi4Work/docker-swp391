@@ -3,9 +3,7 @@ package khoindn.swp391.be.app.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import khoindn.swp391.be.app.pojo._enum.OptionDecisionVoteDetail;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class DecisionVoteDetail {
 
     // Attributes
@@ -34,5 +33,6 @@ public class DecisionVoteDetail {
     @ManyToOne
     @JoinColumn(name = "decision")
     @JsonIgnore
+    @ToString.Exclude
     DecisionVote decisionVote;
 }

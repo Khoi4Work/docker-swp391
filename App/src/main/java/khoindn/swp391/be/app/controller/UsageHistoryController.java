@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @RestController
 @RequestMapping("/api/usage-history")
 @SecurityRequirement(name = "api")
@@ -26,6 +27,14 @@ public class UsageHistoryController {
         List<UsageHistoryListResponse> history =
                 iVehicleUsageHistoryService.getUsageHistoryList(userId, groupId);
 
+        return ResponseEntity.ok(history);
+    }
+
+    @GetMapping("/booking/{groupId}")
+    public ResponseEntity<List<UsageHistoryListResponse>> getUsageByGroupId(
+            @PathVariable int groupId) {
+        List<UsageHistoryListResponse> history =
+                iVehicleUsageHistoryService.getUsageHistoryListByGroupId(groupId);
         return ResponseEntity.ok(history);
     }
 

@@ -61,50 +61,35 @@ public class DataInitializer implements CommandLineRunner {
         }
 
 
-
-
         if (userService.getAllUsers().isEmpty()) {
             UserRole role = userRoleService.findUserRoleByRoleId(1); // roleId = 1 như JSON của bạn
             UserRole roleStaff = userRoleService.findUserRoleByRoleId(4); // roleId = 1 như JSON của bạn
 
-            Users u1 = new Users();
-            u1.setHovaTen("Ndnk");
-            u1.setEmail("khoimapu8@gmail.com");
-            u1.setPassword("12341234"); // mã hóa mật khẩu
-            u1.setCccd("12341234");
-            u1.setGplx("12341234");
-            u1.setPhone("0918842699");
-            u1.setRole(role);
-
-            RegisterUserReq ur1 = modelMapper.map(u1, RegisterUserReq.class);
-            ur1.setRoleId(role.getRoleId());
-            authenticationService.register(ur1);
-
-            Users u2 = new Users();
-            u2.setHovaTen("NguyenKhoi");
-            u2.setEmail("khoimapu2k5@gmail.com");
-            u2.setPassword("123123"); // mã hóa mật khẩu
-            u2.setCccd("123123123");
-            u2.setGplx("123123123");
-            u2.setPhone("0966893655");
-            u2.setRole(role);
-
-            RegisterUserReq ur2 = modelMapper.map(u2, RegisterUserReq.class);
-            ur2.setRoleId(role.getRoleId());
-            authenticationService.register(ur2);
-
-            Users staff = new Users();
-            staff.setHovaTen("staff");
-            staff.setEmail("staff@gmail.com");
-            staff.setPassword("1234"); // mã hóa mật khẩu
-            staff.setCccd("123123");
-            staff.setGplx("123123");
-            staff.setPhone("0966893650");
-            staff.setRole(roleStaff);
-
-            RegisterUserReq urstaff = modelMapper.map(staff, RegisterUserReq.class);
-            urstaff.setRoleId(roleStaff.getRoleId());
-            authenticationService.register(urstaff);
+//            Users u1 = new Users();
+//            u1.setHovaTen("Ndnk");
+//            u1.setEmail("khoimapu8@gmail.com");
+//            u1.setPassword("12341234"); // mã hóa mật khẩu
+//            u1.setCccd("12341234");
+//            u1.setGplx("12341234");
+//            u1.setPhone("0918842699");
+//            u1.setRole(role);
+//
+//            RegisterUserReq ur1 = modelMapper.map(u1, RegisterUserReq.class);
+//            ur1.setRoleId(role.getRoleId());
+//            authenticationService.register(ur1);
+//
+//            Users u2 = new Users();
+//            u2.setHovaTen("NguyenKhoi");
+//            u2.setEmail("khoimapu2k5@gmail.com");
+//            u2.setPassword("123123"); // mã hóa mật khẩu
+//            u2.setCccd("123123123");
+//            u2.setGplx("123123123");
+//            u2.setPhone("0966893655");
+//            u2.setRole(role);
+//
+//            RegisterUserReq ur2 = modelMapper.map(u2, RegisterUserReq.class);
+//            ur2.setRoleId(role.getRoleId());
+//            authenticationService.register(ur2);
 
 
 //            Users u3 = new Users();
@@ -117,6 +102,7 @@ public class DataInitializer implements CommandLineRunner {
 //            u3.setRole(role);
 //
 //            RegisterUserReq ur3 = modelMapper.map(u3, RegisterUserReq.class);
+//            ur3.setRoleId(role.getRoleId());
 //            authenticationService.register(ur3);
 //
 //            Users u4 = new Users();
@@ -129,8 +115,22 @@ public class DataInitializer implements CommandLineRunner {
 //            u4.setRole(role);
 //
 //            RegisterUserReq ur4 = modelMapper.map(u4, RegisterUserReq.class);
+//            ur4.setRoleId(role.getRoleId());
 //            authenticationService.register(ur4);
 
+            Users staff = new Users();
+            staff.setHovaTen("staff");
+            staff.setEmail("staff@gmail.com");
+            staff.setPassword("1234"); // mã hóa mật khẩu
+            staff.setCccd("123123");
+            staff.setGplx("123123");
+            staff.setPhone("0966893650");
+            staff.setRole(roleStaff);
+
+            RegisterUserReq urstaff = modelMapper.map(staff, RegisterUserReq.class);
+            urstaff.setRoleId(roleStaff.getRoleId());
+
+            authenticationService.register(urstaff);
 
 
         }

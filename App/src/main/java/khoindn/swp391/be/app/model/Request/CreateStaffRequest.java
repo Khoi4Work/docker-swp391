@@ -9,5 +9,6 @@ public class CreateStaffRequest {
     private String email;
     private String password;
     private String cccd;
+    private String gplx;
     private String phone;
 }

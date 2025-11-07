@@ -80,12 +80,13 @@ public class ContractService implements IContractService {
         System.out.println("PRIVATE KEY: "+req.getContract_signature());
         System.out.println("CONTRACT CONTENT: "+req.getContractContent());
 
+        cleanKey(req.getContract_signature());
         //Parse privateKey va publicKey sang byte
 
         byte[] privateKeyReceived;
         byte[] publicKeyUser;
         try {
-            privateKeyReceived = Base64.getDecoder().decode(req.getContract_signature());
+            privateKeyReceived = Base64.getDecoder().decode(cleanKey(req.getContract_signature()));
             publicKeyUser = Base64.getDecoder().decode(user.getPublicKey());
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Invalid Base64 encoding for keys");
@@ -369,6 +370,12 @@ public class ContractService implements IContractService {
         } else {
             throw new UndefinedChoiceException("Invalid decision value");
         }
+    }
+    public static String cleanKey(String key) {
+        return key
+                .replaceAll("-----BEGIN (.*)-----", "")
+                .replaceAll("-----END (.*)-----", "")
+                .replaceAll("\\s", ""); // xóa toàn bộ khoảng trắng, xuống dòng
     }
 
 

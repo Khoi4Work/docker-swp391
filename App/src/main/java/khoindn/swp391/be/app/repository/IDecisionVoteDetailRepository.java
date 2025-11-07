@@ -14,4 +14,10 @@ public interface IDecisionVoteDetailRepository extends JpaRepository<DecisionVot
     DecisionVoteDetail getDecisionVoteDetailByGroupMemberAndDecisionVote_Id(GroupMember groupMember, Long decisionVoteId);
 
     List<DecisionVoteDetail> getAllByDecisionVote(DecisionVote decisionVote);
+
+    List<DecisionVoteDetail> getDecisionVoteDetailById(Long id);
+
+    List<DecisionVoteDetail> getAllByDecisionVote_Id(Long decisionVoteId);
+
+    List<DecisionVoteDetail> findAllByDecisionVote(DecisionVote decisionVote);
 }

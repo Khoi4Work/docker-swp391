@@ -52,6 +52,7 @@ public class ScheduleCheckInOutService implements IScheduleCheckInOutService {
                     // User info
                     if (schedule.getGroupMember().getUsers() != null) {
                         res.setUserName(schedule.getGroupMember().getUsers().getHovaTen());
+                        res.setUserId(schedule.getGroupMember().getUsers().getId());
                     }
 
                     // Check-in status

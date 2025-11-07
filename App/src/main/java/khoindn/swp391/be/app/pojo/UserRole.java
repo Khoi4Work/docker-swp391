@@ -25,5 +25,6 @@ public class UserRole {
     // relationship
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     @JsonIgnore
+    @ToString.Exclude
     private List<Users> users;
 }

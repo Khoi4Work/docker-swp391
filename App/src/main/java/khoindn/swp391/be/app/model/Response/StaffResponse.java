@@ -9,6 +9,7 @@ public class StaffResponse {
     private String hovaTen;
     private String email;
     private String cccd;
+    private String gplx;
     private String phone;
     private String roleName;
 }

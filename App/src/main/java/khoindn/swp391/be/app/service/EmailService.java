@@ -9,6 +9,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
 import java.io.File;
 
@@ -32,11 +33,6 @@ public class EmailService implements IEmailService {
             helper.setSubject(contentSender.getSubject());
             helper.setText(contentSender.getTemplate(), true); // true = nội dung HTML
 
-            // Nếu có file đính kèm
-            if (contentSender.getUrl() != null) {
-                FileSystemResource file = new FileSystemResource(new File(contentSender.getUrl()));
-                helper.addAttachment(file.getFilename(), file);
-            }
 
             javaMailSender.send(mimeMessage);
             System.out.println("✅ Email sent successfully to " + contentSender.getEmail());

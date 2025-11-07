@@ -3,9 +3,7 @@ package khoindn.swp391.be.app.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import khoindn.swp391.be.app.pojo._enum.StatusGroupMember;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,15 +37,23 @@ public class GroupMember {
     @JoinColumn(name = "user_id")
     private Users users;
 
+    @OneToMany(mappedBy = "groupMember")
+    @JsonIgnore
+    @ToString.Exclude
+    private List<DecisionVoteDetail> decisionVoteDetails = new ArrayList<>();
+
     @OneToMany(mappedBy = "groupMember", cascade = CascadeType.ALL)
     @JsonIgnore
+    @ToString.Exclude
     private List<RequestGroupService> requestGroupServices = new ArrayList<>();
 
     @OneToMany(mappedBy = "groupMember", cascade = CascadeType.ALL)
     @JsonIgnore
+    @ToString.Exclude
     private List<FundDetail> fundDetails = new ArrayList<>();
 
     @OneToMany(mappedBy = "groupMember", cascade = CascadeType.ALL)
     @JsonIgnore
+    @ToString.Exclude
     private List<RequestVehicleService> requestVehicleServices = new ArrayList<>();
 }

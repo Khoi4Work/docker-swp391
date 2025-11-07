@@ -1,4 +1,4 @@
-// trong /service/StaffManagementService.java
+
 package khoindn.swp391.be.app.service;
 
 import khoindn.swp391.be.app.model.Request.CreateStaffRequest;
@@ -22,7 +22,6 @@ public class StaffManagementService implements IStaffManagementService {
     private final IUserRepository userRepository;
     private final IUserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
-
     private static final Integer STAFF_ROLE_ID = 4;
 
     @Override
@@ -35,6 +34,9 @@ public class StaffManagementService implements IStaffManagementService {
         }
         if (userRepository.existsByPhone(request.getPhone())) {
             throw new RuntimeException("Lỗi: Số điện thoại đã tồn tại!");
+        }
+        if (userRepository.existsByGplx(request.getGplx())) {
+            throw new RuntimeException("Lỗi: GPLX đã tồn tại!");
         }
 
         UserRole staffRole = userRoleRepository.findUserRoleByRoleId(STAFF_ROLE_ID);
@@ -49,6 +51,7 @@ public class StaffManagementService implements IStaffManagementService {
         newStaff.setCccd(request.getCccd());
         newStaff.setPhone(request.getPhone());
         newStaff.setRole(staffRole);
+        newStaff.setGplx(request.getGplx());
 
         Users savedStaff = userRepository.save(newStaff);
         return mapEntityToResponse(savedStaff);
@@ -90,6 +93,9 @@ public class StaffManagementService implements IStaffManagementService {
         if (request.getPhone() != null && !request.getPhone().isEmpty()) {
             existingStaff.setPhone(request.getPhone());
         }
+        if (request.getGplx() != null && !request.getGplx().isEmpty()) {
+            existingStaff.setGplx(request.getGplx());
+        }
 
         Users updatedStaff = userRepository.save(existingStaff);
         return mapEntityToResponse(updatedStaff);
@@ -97,7 +103,6 @@ public class StaffManagementService implements IStaffManagementService {
 
     @Override
     public void deleteStaff(Integer staffId) {
-        // Đã sửa: Dùng hàm đã fix lỗi và check null
         Users staff = userRepository.findByIdAndRole_RoleId(staffId, STAFF_ROLE_ID);
         if (staff == null) {
             throw new RuntimeException("Không tìm thấy Staff với ID: " + staffId);
@@ -105,7 +110,6 @@ public class StaffManagementService implements IStaffManagementService {
         userRepository.delete(staff);
     }
 
-    // Phương thức Helper (Hỗ trợ)
     private StaffResponse mapEntityToResponse(Users user) {
         StaffResponse response = new StaffResponse();
         response.setId(user.getId());
@@ -113,6 +117,7 @@ public class StaffManagementService implements IStaffManagementService {
         response.setEmail(user.getEmail());
         response.setCccd(user.getCccd());
         response.setPhone(user.getPhone());
+        response.setGplx(user.getGplx());
 
         if (user.getRole() != null) {
             response.setRoleName(user.getRole().getRoleName()); // Giả sử hàm là getRoleName()
